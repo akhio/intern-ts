@@ -42,7 +42,7 @@ export const generateStamps = (): Stamp[] => {
 
 export const getScore = (gameStamps: Stamp[], offset: number): Score => {
     // Создаю объект для сохранения значений на момент оффсета
-    let score = {
+    let score: Score = {
         home: 0,
         away: 0
     }
