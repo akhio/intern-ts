@@ -22,32 +22,40 @@ const emptyScoreStamp: Stamp = {
 };
 
 export const generateStamps = (): Stamp[] => {
-    const scoreStamps = Array(TIMESTAMPS_COUNT)
-        .fill(emptyScoreStamp)
-        .map(
-            ((acc) => () => {
-                const scoreChanged =
-                    Math.random() > 1 - PROBABILITY_SCORE_CHANGED;
-                const homeScoreChange =
-                    scoreChanged && Math.random() < PROBABILITY_HOME_SCORE
-                        ? 1
-                        : 0;
-                const awayScoreChange =
-                    scoreChanged && !homeScoreChange ? 1 : 0;
-                return {
-                    offset: (acc.offset +=
-                        Math.floor(Math.random() * OFFSET_MAX_STEP) + 1),
-                    score: {
-                        home: (acc.score.home += homeScoreChange),
-                        away: (acc.score.away += awayScoreChange),
-                    },
-                };
-            })(emptyScoreStamp)
-        );
+    const scoreStamps = Array(TIMESTAMPS_COUNT).fill(emptyScoreStamp).map(
+        ((acc) => () => {
+            const scoreChanged = Math.random() > 1 - PROBABILITY_SCORE_CHANGED;
+            const homeScoreChange = scoreChanged && Math.random() < PROBABILITY_HOME_SCORE? 1 : 0;
+            const awayScoreChange = scoreChanged && !homeScoreChange ? 1 : 0;
+            return {
+                offset: (acc.offset += Math.floor(Math.random() * OFFSET_MAX_STEP) + 1),
+                score: {
+                    home: (acc.score.home += homeScoreChange),
+                    away: (acc.score.away += awayScoreChange),
+                },
+            };
+        })(emptyScoreStamp)
+    );
 
     return scoreStamps;
 };
 
 export const getScore = (gameStamps: Stamp[], offset: number): Score => {
-    // continue the function's implementation
+    // Создаю объект для сохранения значений на момент оффсета
+    let score = {
+        home: 0,
+        away: 0
+    }
+
+    // Находится ли аргумент оффсета ниже чем оффсет в штампе, если так, то заканчиваю цикл если нет то сохраняю счет
+    for (const stamp of gameStamps) {
+        if (stamp.offset > offset) {
+            break;
+        } else {
+            score = stamp.score;
+        }
+    }
+
+    return score;   
+
 };
